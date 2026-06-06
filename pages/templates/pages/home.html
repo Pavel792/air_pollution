@@ -1,0 +1,375 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+
+<style>
+    .air-quality {
+        max-width: 75rem;
+        padding: 0 1.25rem;
+        margin: 1.25rem auto;
+    }
+
+    .today-block {
+        background: #667eea;
+        color: white;
+        padding: 2rem;
+        border-radius: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .today-block h2 {
+        color: white;
+    }
+
+    .today-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1.25rem;
+    }
+    
+    .today-header h2 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .aqi-number {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    .pollution-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 1.25rem;
+    }
+
+    .pollutant-item {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1rem;
+        border-radius: 0.75rem;
+        text-align: center;
+    }
+
+    .pollutant-name {
+        font-size: 0.875rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .pollutant-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+    }
+
+    .pollutant-level {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 1rem;
+    }
+
+    .level-Хорошо {
+        background: #27ae60;
+        color: white;
+    }
+
+    .level-Нормально {
+        background: #f39c12;
+        color: white;
+    }
+
+    .level-Плохо {
+        background: #e74c3c;
+        color: white;
+    }
+
+    h2 {
+        color: #333;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .prediction-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+
+    .prediction-block {
+        background: #f8f9fa;
+        padding: 1.25rem;
+        border-radius: 1rem;
+        border: 1px solid #e0e0e0;
+    }
+
+    .prediction-date {
+        font-size: 1.125rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .prediction-aqi {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 0.625rem;
+    }
+
+    .prediction-block .pollution-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+    }
+
+    .prediction-block .pollutant-item {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    .prediction-block .pollutant-value {
+        font-size: 1rem;
+    }
+
+    .prediction-block .pollutant-name {
+        font-size: 0.7rem;
+    }
+
+    .prediction-block .pollutant-name,
+    .prediction-block .pollutant-value {
+        margin-bottom: 0.15rem;
+    }
+
+    .pollutants-info {
+        margin-top: 3rem;
+        margin-bottom: 5rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+
+    .info-item {
+        background: #f8f9fa;
+        padding: 1.25rem;
+        border-radius: 1rem;
+        border-left: 4px solid #667eea;
+    }
+
+    .info-item h3 {
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-item p {
+        color: #555;
+        line-height: 1.5;
+        font-size: 0.9rem;
+    }
+
+    .scale {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
+    }
+
+    .scale .level-Хорошо,
+    .scale .level-Нормально,
+    .scale .level-Плохо {
+        display: block;
+        text-align: center;
+        padding: 0.2rem 0.5rem;
+        font-size: 0.8rem;
+        border-radius: 0.5rem;
+    }
+
+</style>
+
+<div class="air-quality">
+    <div class="today-block">
+        <div class="today-header">
+            <div>
+                <h2>Сегодня</h2>
+                <div>{{ today.date }}</div>
+            </div>
+            <div class="aqi-rating">
+                <div class="aqi-number">{{ today.aqi }}</div>
+                <div>Качество воздуха: {{ today.quality_verdict }}</div>
+            </div>
+        </div>
+        <div class="pollution-grid">
+            <div class="pollutant-item">
+                <div class="pollutant-name">PM<sub>2.5</sub></div>
+                <div class="pollutant-value">{{ today.pollutants.pm25.value }} {{ today.pollutants.pm25.unit }}</div>
+                <span class="pollutant-level level-{{ today.pollutants.pm25.verdict }}">{{ today.pollutants.pm25.verdict }}</span>
+            </div>
+            <div class="pollutant-item">
+                <div class="pollutant-name">PM<sub>10</sub></div>
+                <div class="pollutant-value">{{ today.pollutants.pm10.value }} {{ today.pollutants.pm10.unit }}</div>
+                <span class="pollutant-level level-{{ today.pollutants.pm10.verdict }}">{{ today.pollutants.pm10.verdict }}</span>
+            </div>
+            <div class="pollutant-item">
+                <div class="pollutant-name">SO<sub>2</sub></div>
+                <div class="pollutant-value">{{ today.pollutants.so2.value }} {{ today.pollutants.so2.unit }}</div>
+                <span class="pollutant-level level-{{ today.pollutants.so2.verdict }}">{{ today.pollutants.so2.verdict }}</span>
+            </div>
+            <div class="pollutant-item">
+                <div class="pollutant-name">CO</div>
+                <div class="pollutant-value">{{ today.pollutants.co.value }} {{ today.pollutants.co.unit }}</div>
+                <span class="pollutant-level level-{{ today.pollutants.co.verdict }}">{{ today.pollutants.co.verdict }}</span>
+            </div>
+            <div class="pollutant-item">
+                <div class="pollutant-name">NO<sub>2</sub></div>
+                <div class="pollutant-value">{{ today.pollutants.no2.value }} {{ today.pollutants.no2.unit }}</div>
+                <span class="pollutant-level level-{{ today.pollutants.no2.verdict }}">{{ today.pollutants.no2.verdict }}</span>
+            </div>
+            <div class="pollutant-item">
+                <div class="pollutant-name">O<sub>3</sub></div>
+                <div class="pollutant-value">{{ today.pollutants.o3.value }} {{ today.pollutants.o3.unit }}</div>
+                <span class="pollutant-level level-{{ today.pollutants.o3.verdict }}">{{ today.pollutants.o3.verdict }}</span>
+            </div>
+        </div>
+    </div>
+
+    <h2>Прогноз на 3 дня</h2>
+    <div class="prediction-grid">
+        {% for pred in predictions %}
+        <div class="prediction-block">
+            <div class="prediction-date">{{ pred.date }}</div>
+            <div class="prediction-aqi">{{ pred.aqi }}</div>
+            <div>Качество воздуха: {{ pred.quality_verdict }}</div>
+            <div class="pollution-grid">
+                <div class="pollutant-item">
+                    <div class="pollutant-name">PM<sub>2.5</sub></div>
+                    <div class="pollutant-value">{{ pred.pollutants.pm25.value }} {{ pred.pollutants.pm25.unit }}</div>
+                    <span class="pollutant-level level-{{ pred.pollutants.pm25.verdict }}">{{ pred.pollutants.pm25.verdict }}</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">PM<sub>10</sub></div>
+                    <div class="pollutant-value">{{ pred.pollutants.pm10.value }} {{ pred.pollutants.pm10.unit }}</div>
+                    <span class="pollutant-level level-{{ pred.pollutants.pm10.verdict }}">{{ pred.pollutants.pm10.verdict }}</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">SO<sub>2</sub></div>
+                    <div class="pollutant-value">{{ pred.pollutants.so2.value }} {{ pred.pollutants.so2.unit }}</div>
+                    <span class="pollutant-level level-{{ pred.pollutants.so2.verdict }}">{{ pred.pollutants.so2.verdict }}</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">CO</div>
+                    <div class="pollutant-value">{{ pred.pollutants.co.value }} {{ pred.pollutants.co.unit }}</div>
+                    <span class="pollutant-level level-{{ pred.pollutants.co.verdict }}">{{ pred.pollutants.co.verdict }}</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">NO<sub>2</sub></div>
+                    <div class="pollutant-value">{{ pred.pollutants.no2.value }} {{ pred.pollutants.no2.unit }}</div>
+                    <span class="pollutant-level level-{{ pred.pollutants.no2.verdict }}">{{ pred.pollutants.no2.verdict }}</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">O<sub>3</sub></div>
+                    <div class="pollutant-value">{{ pred.pollutants.o3.value }} {{ pred.pollutants.o3.unit }}</div>
+                    <span class="pollutant-level level-{{ pred.pollutants.o3.verdict }}">{{ pred.pollutants.o3.verdict }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="pollutants-info">
+        <h2>Информация о загрязнителях</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <h3>PM<sub>2.5</sub></h3>
+                <p>Мелкие частицы диаметром менее 2.5 мкм. Проникают глубоко в лёгкие и в кровоток.</p>
+                <div class="scale">
+                    <span class="level-Хорошо">Хорошо: 0–15 мкг/м³</span>
+                    <span class="level-Нормально">Нормально: 15–35 мкг/м³</span>
+                    <span class="level-Плохо">Плохо: >35 мкг/м³</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <h3>PM<sub>10</sub></h3>
+                <p>Частицы диаметром менее 10 мкм. Раздражают дыхательные пути.</p>
+                <div class="scale">
+                    <span class="level-Хорошо">Хорошо: 0–30 мкг/м³</span>
+                    <span class="level-Нормально">Нормально: 30–50 мкг/м³</span>
+                    <span class="level-Плохо">Плохо: >50 мкг/м³</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <h3>SO<sub>2</sub></h3>
+                <p>Диоксид серы. Вызывает раздражение глаз и дыхания.</p>
+                <div class="scale">
+                    <span class="level-Хорошо">Хорошо: 0–50 мкг/м³</span>
+                    <span class="level-Нормально">Нормально: 50–125 мкг/м³</span>
+                    <span class="level-Плохо">Плохо: >125 мкг/м³</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <h3>CO</h3>
+                <p>Угарный газ. Не имеет запаха и цвета. Блокирует перенос кислорода кровью.</p>
+                <div class="scale">
+                    <span class="level-Хорошо">Хорошо: 0–5 мг/м³</span>
+                    <span class="level-Нормально">Нормально: 5–10 мг/м³</span>
+                    <span class="level-Плохо">Плохо: >10 мг/м³</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <h3>NO<sub>2</sub></h3>
+                <p>Диоксид азота. Вызывает воспаление дыхательных путей.</p>
+                <div class="scale">
+                    <span class="level-Хорошо">Хорошо: 0–40 мкг/м³</span>
+                    <span class="level-Нормально">Нормально: 40–100 мкг/м³</span>
+                    <span class="level-Плохо">Плохо: >100 мкг/м³</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <h3>O<sub>3</sub></h3>
+                <p>Озон на уровне земли. Агрессивный газ, повреждает лёгкие.</p>
+                <div class="scale">
+                    <span class="level-Хорошо">Хорошо: 0–100 мкг/м³</span>
+                    <span class="level-Нормально">Нормально: 100–160 мкг/м³</span>
+                    <span class="level-Плохо">Плохо: >160 мкг/м³</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="safety-info">
+        <h2>Средства защиты</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <h3> Респираторы</h3>
+                <p>Защищают от PM<sub>2.5</sub> и PM<sub>10</sub></p>
+                <ul>
+                    <p>N95/KN95 — задерживает 95% частиц</p>
+                    <p>FFP2/FFP3 — европейский стандарт</p>
+                    <p>Обычные маски от PM<sub>2.5</sub> не спасают</p>
+                </ul>
+            </div>
+            <div class="info-item">
+                <h3>В помещении</h3>
+                <p>Снижаем концентрацию вредных веществ</p>
+                <ul>
+                    <p>Очистители воздуха с HEPA-фильтром</p>
+                    <p>Закрыть окна при высоком уровне PM</p>
+                    <p>Увлажнители помогают осаждать частицы</p>
+                </ul>
+            </div>
+            <div class="info-item">
+                <h3>Для газов (CO, NO₂, SO₂, O₃)</h3>
+                <p>Респираторы с угольными фильтрами</p>
+                <ul>
+                    <p>Активированный уголь поглощает газы</p>
+                    <p>Проветривать лучше утром или вечером</p>
+                    <p>В пробках закрывать окна и включать рециркуляцию</p>
+                </ul>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+{% endblock %}

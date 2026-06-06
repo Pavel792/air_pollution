@@ -1,0 +1,232 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+<style>
+    .history-container {
+        max-width: 95rem;
+        margin: 1.25rem auto;
+        padding: 0 1.25rem;
+    }
+    
+    .day-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e0e0e0;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .day-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    
+    .day-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #667eea;
+    }
+    
+    .day-date {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .day-verdict {
+        font-size: 1rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+        font-weight: bold;
+    }
+    
+    .section-title {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #667eea;
+        margin: 1rem 0 0.75rem 0;
+        padding-left: 0.5rem;
+        border-left: 3px solid #667eea;
+    }
+    
+    .pollution-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+    
+    .pollutant-item {
+        background: #f8f9fa;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .pollutant-name {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 0.3rem;
+    }
+    
+    .pollutant-value {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+    }
+    
+    .pollutant-verdict {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 0.75rem;
+        display: inline-block;
+    }
+    
+    .verdict-good {
+        background: #27ae60;
+        color: white;
+    }
+    
+    .verdict-normal {
+        background: #f39c12;
+        color: white;
+    }
+    
+    .verdict-bad {
+        background: #e74c3c;
+        color: white;
+    }
+    
+    .verdict-unknown {
+        background: #95a5a6;
+        color: white;
+    }
+    
+    .model-badge {
+        background: #667eea;
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.5rem;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+    }
+    
+    h2 {
+        color: #333;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+        .pollution-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="history-container">
+    <h2>История измерений и прогнозов</h2>
+    
+    {% if data %}
+        {% for row in data %}
+        <div class="day-card">
+            <div class="day-header">
+                <span class="day-date">{{ row.date }}</span>
+                <span class="day-verdict verdict-{% if row.day_verdict == 'Хорошо' %}good{% elif row.day_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                    {{ row.day_verdict }}
+                </span>
+            </div>
+            
+            <div class="section-title">Фактические данные</div>
+            <div class="pollution-grid">
+                <div class="pollutant-item">
+                    <div class="pollutant-name">PM<sub>2.5</sub></div>
+                    <div class="pollutant-value">{{ row.pm25 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pm25_verdict == 'Хорошо' %}good{% elif row.pm25_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                        {{ row.pm25_verdict }}
+                    </span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">PM<sub>10</sub></div>
+                    <div class="pollutant-value">{{ row.pm10 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pm10_verdict == 'Хорошо' %}good{% elif row.pm10_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                        {{ row.pm10_verdict }}
+                    </span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">SO<sub>2</sub></div>
+                    <div class="pollutant-value">{{ row.so2 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.so2_verdict == 'Хорошо' %}good{% elif row.so2_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                        {{ row.so2_verdict }}
+                    </span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">CO</div>
+                    <div class="pollutant-value">{{ row.co }} мг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.co_verdict == 'Хорошо' %}good{% elif row.co_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                        {{ row.co_verdict }}
+                    </span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">NO<sub>2</sub></div>
+                    <div class="pollutant-value">{{ row.no2 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.no2_verdict == 'Хорошо' %}good{% elif row.no2_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                        {{ row.no2_verdict }}
+                    </span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">O<sub>3</sub></div>
+                    <div class="pollutant-value">{{ row.o3 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.o3_verdict == 'Хорошо' %}good{% elif row.o3_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
+                        {{ row.o3_verdict }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                Было спрогнозировано за день до
+            </div>
+            <div class="pollution-grid">
+                <div class="pollutant-item">
+                    <div class="pollutant-name">PM<sub>2.5</sub></div>
+                    <div class="pollutant-value">0 мкг/м³</div>
+                    <span class="pollutant-verdict verdict-unknown">—</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">PM<sub>10</sub></div>
+                    <div class="pollutant-value">0 мкг/м³</div>
+                    <span class="pollutant-verdict verdict-unknown">—</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">SO<sub>2</sub></div>
+                    <div class="pollutant-value">0 мкг/м³</div>
+                    <span class="pollutant-verdict verdict-unknown">—</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">CO</div>
+                    <div class="pollutant-value">0 мг/м³</div>
+                    <span class="pollutant-verdict verdict-unknown">—</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">NO<sub>2</sub></div>
+                    <div class="pollutant-value">0 мкг/м³</div>
+                    <span class="pollutant-verdict verdict-unknown">—</span>
+                </div>
+                <div class="pollutant-item">
+                    <div class="pollutant-name">O<sub>3</sub></div>
+                    <div class="pollutant-value">0 мкг/м³</div>
+                    <span class="pollutant-verdict verdict-unknown">—</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Нет данных для отображения.</p>
+    {% endif %}
+</div>
+{% endblock %}

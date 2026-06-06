@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Качество воздуха</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+        }
+
+        .navbar {
+            background: #667eea;
+            padding: 1rem 1.25rem;
+            border-radius: 0;
+            display: flex;
+            gap: 1.25rem;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background: #667eea;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'home' %}">Главная</a>
+        <a href="{% url 'history' %}">История</a>
+        <a href="{% url 'about' %}">О сайте</a>
+    </nav>
+    
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Качество воздуха. Команда воздуханов</p>
+    </footer>
+</body>
+</html>
