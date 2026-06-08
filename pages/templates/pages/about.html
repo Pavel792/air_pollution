@@ -1,6 +1,104 @@
 {% extends 'pages/base.html' %}
 
 {% block content %}
-    <h1>О сайте</h1>
-    <p>Информация о проекте</p>
+<style>
+    .about-container {
+        max-width: 75rem;
+        margin: 2rem auto;
+        padding: 0 1.25rem;
+    }
+    
+    .about-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .about-header h1 {
+        color: #333;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .about-header p {
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+    
+    .about-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .about-card h2 {
+        color: #667eea;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+    }
+    
+    .about-card p {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+    
+    .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .source-item {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 1rem;
+        text-align: center;
+    }
+    
+    .source-item h3 {
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="about-container">
+    <div class="about-header">
+        <h1>О проекте</h1>
+        <p>Мониторинг качества воздуха в Санкт-Петербурге</p>
+    </div>
+    
+    <div class="about-card">
+        <h2>Что мы делаем</h2>
+        <p>Проект собирает данные о концентрациях загрязняющих веществ (PM<sub>2.5</sub>, PM<sub>10</sub>, CO, SO<sub>2</sub>, NO<sub>2</sub>) и предоставляет прогноз на 3 дня вперед с помощью машинного обучения.</p>
+        <p>Данные обновляются ежедневно из открытых источников и датчиков в Санкт-Петербурге.</p>
+    </div>
+    
+    <div class="about-card">
+        <h2>Как работает прогноз</h2>
+        <p>Модель машинного обучения (линейная регрессия) анализирует исторические данные за последние 3 недели, учитывая сезонность, день недели, выходные и тренды.</p>
+    </div>
+    
+    <div class="about-card">
+        <h2>Источники данных</h2>
+        <div class="grid-2">
+            <div class="source-item">
+                <h3>Copernicus</h3>
+                <p>Данные о загрязнителях для истории</p>
+            </div>
+            <div class="source-item">
+                <h3>Датчики Санкт-Петербурга</h3>
+                <p>Актуальная информация для модели</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

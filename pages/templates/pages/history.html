@@ -179,13 +179,6 @@
                         {{ row.no2_verdict }}
                     </span>
                 </div>
-                <div class="pollutant-item">
-                    <div class="pollutant-name">O<sub>3</sub></div>
-                    <div class="pollutant-value">{{ row.o3 }} мкг/м³</div>
-                    <span class="pollutant-verdict verdict-{% if row.o3_verdict == 'Хорошо' %}good{% elif row.o3_verdict == 'Нормально' %}normal{% else %}bad{% endif %}">
-                        {{ row.o3_verdict }}
-                    </span>
-                </div>
             </div>
             
             <div class="section-title">
@@ -194,33 +187,38 @@
             <div class="pollution-grid">
                 <div class="pollutant-item">
                     <div class="pollutant-name">PM<sub>2.5</sub></div>
-                    <div class="pollutant-value">0 мкг/м³</div>
-                    <span class="pollutant-verdict verdict-unknown">—</span>
+                    <div class="pollutant-value">{{ row.pred_pm25 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pred_pm25_verdict == 'Хорошо' %}good{% elif row.pred_pm25_verdict == 'Нормально' %}normal{% elif row.pred_pm25_verdict == 'Плохо' %}bad{% else %}unknown{% endif %}">
+                        {{ row.pred_pm25_verdict|default:"—" }}
+                    </span>
                 </div>
                 <div class="pollutant-item">
                     <div class="pollutant-name">PM<sub>10</sub></div>
-                    <div class="pollutant-value">0 мкг/м³</div>
-                    <span class="pollutant-verdict verdict-unknown">—</span>
+                    <div class="pollutant-value">{{ row.pred_pm10 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pred_pm10_verdict == 'Хорошо' %}good{% elif row.pred_pm10_verdict == 'Нормально' %}normal{% elif row.pred_pm10_verdict == 'Плохо' %}bad{% else %}unknown{% endif %}">
+                        {{ row.pred_pm10_verdict|default:"—" }}
+                    </span>
                 </div>
                 <div class="pollutant-item">
                     <div class="pollutant-name">SO<sub>2</sub></div>
-                    <div class="pollutant-value">0 мкг/м³</div>
-                    <span class="pollutant-verdict verdict-unknown">—</span>
+                    <div class="pollutant-value">{{ row.pred_so2 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pred_so2_verdict == 'Хорошо' %}good{% elif row.pred_so2_verdict == 'Нормально' %}normal{% elif row.pred_so2_verdict == 'Плохо' %}bad{% else %}unknown{% endif %}">
+                        {{ row.pred_so2_verdict|default:"—" }}
+                    </span>
                 </div>
                 <div class="pollutant-item">
                     <div class="pollutant-name">CO</div>
-                    <div class="pollutant-value">0 мг/м³</div>
-                    <span class="pollutant-verdict verdict-unknown">—</span>
+                    <div class="pollutant-value">{{ row.pred_co }} мг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pred_co_verdict == 'Хорошо' %}good{% elif row.pred_co_verdict == 'Нормально' %}normal{% elif row.pred_co_verdict == 'Плохо' %}bad{% else %}unknown{% endif %}">
+                        {{ row.pred_co_verdict|default:"—" }}
+                    </span>
                 </div>
                 <div class="pollutant-item">
                     <div class="pollutant-name">NO<sub>2</sub></div>
-                    <div class="pollutant-value">0 мкг/м³</div>
-                    <span class="pollutant-verdict verdict-unknown">—</span>
-                </div>
-                <div class="pollutant-item">
-                    <div class="pollutant-name">O<sub>3</sub></div>
-                    <div class="pollutant-value">0 мкг/м³</div>
-                    <span class="pollutant-verdict verdict-unknown">—</span>
+                    <div class="pollutant-value">{{ row.pred_no2 }} мкг/м³</div>
+                    <span class="pollutant-verdict verdict-{% if row.pred_no2_verdict == 'Хорошо' %}good{% elif row.pred_no2_verdict == 'Нормально' %}normal{% elif row.pred_no2_verdict == 'Плохо' %}bad{% else %}unknown{% endif %}">
+                        {{ row.pred_no2_verdict|default:"—" }}
+                    </span>
                 </div>
             </div>
         </div>

@@ -1,24 +1,17 @@
-# === Виртуальное окружение ===
-venv/
-env/
-.venv/
-.env/
-**/pyvenv.cfg
+air_venv/
 
-# === Файлы Python ===
 *.pyc
 *.pyo
 *.pyd
 __pycache__/
 *.so
 
-# === Django (самое важное для вас) ===
-# Кэш (чтобы точно не улетело)
+
 *.cache
 cache/
 django_cache/
 
-# Медиа-файлы (загруженные пользователями, если есть)
+
 media/
 
 # Собранные статические файлы (если есть команда collectstatic)
@@ -44,16 +37,5 @@ db.sqlite3
 .env.local
 .env.*
 
-# IDE
 .vscode/
-.idea/
-*.swp
-*.swo
-*~
 
-# Системное
-.DS_Store
-Thumbs.db
-
-# === Логи ===
-*.log
