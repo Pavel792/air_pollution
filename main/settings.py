@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-aflhmv5u35a4v$*irh7r0jhnyh4iwgyv7qr!v9!39o0bsmhnk@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['airpollution-production.up.railway.app']
 
 
 # Application definition
